@@ -28,7 +28,7 @@ const Table = () => {
   const urutanAkun = localStorage.getItem("urutanAkun");
   const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
 
-  const keys = Object.keys(akun.dataHp);
+  const keys = Object.keys(akun?.dataHp || {});
 
   const data = keys.map((key) => akun.dataHp[key]);
   const [TABLE_ROWS, setTABLE_ROWS] = useState([]);
@@ -60,6 +60,14 @@ const Table = () => {
   useEffect(() => {
     updateDisplayedData();
   }, [startIndex, TABLE_ROWS, reloadEffect]);
+
+  useEffect(() => {
+    if (startIndex >= TABLE_ROWS.length) {
+      const lastPageStartIndex = Math.max(TABLE_ROWS.length - 5, 0);
+      setStartIndex(lastPageStartIndex);
+      setActualIndex(lastPageStartIndex);
+    }
+  }, [TABLE_ROWS]);
 
   const handleNextClick = () => {
     if (startIndex + 5 < TABLE_ROWS.length) {
@@ -119,7 +127,7 @@ const Table = () => {
             </Link>
           </div>
         </CardHeader>
-        <CardBody className="p-0 px-0">
+        <CardBody className="overflow-x-auto p-0 top-0 px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr>
@@ -146,8 +154,17 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-            {displayedData.map(
-                ({ merk, harga, ram, rom, display }, index) => {
+              {displayedData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={TABLE_HEAD.length}
+                    className="p-4 text-center"
+                  >
+                    Data Kosong
+                  </td>
+                </tr>
+              ) : (
+                displayedData.map(({ merk, harga, ram, rom, display }, index) => {
                   const isLast = index === displayedData.length - 1;
                   const classes = isLast
                     ? "p-4"
@@ -250,32 +267,32 @@ const Table = () => {
                       </td>
                     </tr>
                   );
-                }
+                })
               )}
             </tbody>
           </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-        <Typography variant="small" color="blue-gray" className="font-normal">
-          Page {Math.ceil((startIndex + 1) / 5)} of {Math.ceil(TABLE_ROWS.length / 5)}
-        </Typography>
-        <div className="flex gap-2">
-          {/* Tombol "Previous" */}
-          <Button variant="outlined" size="sm" className="text-slate-200" onClick={handlePreviousClick}>
-            Previous
-          </Button>
-          {/* Tombol "Next" */}
-          <Button variant="outlined" size="sm" className="text-slate-200" onClick={handleNextClick}>
-            Next
-          </Button>
-        </div>
-      </CardFooter>
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            Page {Math.ceil((startIndex + 1) / 5)} of {Math.ceil(TABLE_ROWS.length / 5)}
+          </Typography>
+          <div className="flex gap-2">
+            {/* Tombol "Previous" */}
+            <Button variant="outlined" size="sm" className="text-slate-200" onClick={handlePreviousClick}>
+              Previous
+            </Button>
+            {/* Tombol "Next" */}
+            <Button variant="outlined" size="sm" className="text-slate-200" onClick={handleNextClick}>
+              Next
+            </Button>
+          </div>
+        </CardFooter>
         <button
-            type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-[35px] py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-auto"
-          >
-            Cek Ponsel
-          </button>
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-[35px] py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-auto"
+        >
+          Cek Ponsel
+        </button>
       </Card>
     </div>
   );

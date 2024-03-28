@@ -9,7 +9,7 @@ const Navbar = () => {
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard', current: true },
-  { name: 'Team', to: '#', current: false },
+  { name: 'Team', to: '/team', current: false },
   { name: 'About Us', to: '/aboutus', current: false },
 ]
 

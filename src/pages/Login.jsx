@@ -35,23 +35,24 @@ const Login = () => {
     const key = getNextKey();
     for (let index = 1; index <= key; index++) {
       const dataLocalAkun = JSON.parse(localStorage.getItem("akun" + index));
-      if (
-        dataLocalAkun.email === getDataAkun.email &&
-        dataLocalAkun.password === getDataAkun.password
-      ) {
-        localStorage.setItem("urutanAkun", index);
-        return navigate("/dashboard");
-      } else {
-        return Swal.fire({
-          icon: "error",
-          showConfirmButton: false,
-          text: "Email atau password salah!",
-          timer: 1500,
-          timerProgressBar: true,
-        });
+      if (dataLocalAkun.email === getDataAkun.email) {
+        if (
+          dataLocalAkun.email === getDataAkun.email &&
+          dataLocalAkun.password === getDataAkun.password
+        ) {
+          localStorage.setItem("urutanAkun", index);
+          return navigate("/dashboard");
+        } else {
+          return Swal.fire({
+            icon: "error",
+            showConfirmButton: false,
+            text: "Email atau password salah!",
+            timer: 1500,
+            timerProgressBar: true,
+          });
+        }
       }
     }
-
     if (localStorage.getItem("akun" + key) === null) {
       return Swal.fire({
         icon: "error",
@@ -100,11 +101,7 @@ const Login = () => {
           </div>
 
           <div className="mt-3 w-full sm:max-w-sm">
-            <form
-              action="#"
-              method="POST"
-              onSubmit={handleSubmit}
-            >
+            <form action="#" method="POST" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="email"
@@ -155,7 +152,9 @@ const Login = () => {
                   />
                   <p
                     onClick={togglePasswordVisibility}
-                    className={`absolute right-0 top-0 m-2 bg-white cursor-pointer ${getDataAkun.password.length === 0 ? 'hidden' : ''}`}
+                    className={`absolute right-0 top-0 m-2 bg-white cursor-pointer ${
+                      getDataAkun.password.length === 0 ? "hidden" : ""
+                    }`}
                   >
                     {showPassword ? (
                       <svg

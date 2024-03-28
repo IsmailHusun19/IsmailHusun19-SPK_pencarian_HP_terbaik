@@ -8,6 +8,7 @@ import FormInputData from './pages/InputData';
 import Footer from './component/Footer';
 import SignUp from './pages/SignUp';
 import Table from './component/Table';
+import Team from './pages/Team';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Table />} />
+        <Route path="/team" element={<Team />} />
       </Routes>
       <Footer/>
     </Router>
@@ -29,7 +31,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const currentURL = location.pathname;
-  const checking = !['/login', '/', '/signup', '/aboutus'].includes(currentURL);
+  const checking = !['/login', '/', '/signup', '/aboutus', '/team'].includes(currentURL);
 
   return (
     <>
