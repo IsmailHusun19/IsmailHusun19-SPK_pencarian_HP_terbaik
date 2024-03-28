@@ -1,0 +1,122 @@
+import aboutUsImage from "../assets/aboutUs.jpg";
+import Navbar from "../component/Navbar";
+import NavbarV2 from "../component/NavbarV2";
+
+const AboutUs = () => {
+  const cekLogin = () => {
+    return localStorage.getItem("urutanAkun") !== null ? true : false;
+  };
+  return (
+    <>
+      {cekLogin() ? <Navbar /> : <NavbarV2 />}
+      <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <svg
+            className="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
+            aria-hidden="true"
+          >
+            <defs>
+              <pattern
+                id="e813992c-7d03-4cc4-a2bd-151760b470a0"
+                width={200}
+                height={200}
+                x="50%"
+                y={-1}
+                patternUnits="userSpaceOnUse"
+              >
+                <path d="M100 200V.5M.5 .5H200" fill="none" />
+              </pattern>
+            </defs>
+            <svg x="50%" y={-1} className="overflow-visible fill-gray-50">
+              <path
+                d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
+                strokeWidth={0}
+              />
+            </svg>
+            <rect
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+              fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)"
+            />
+          </svg>
+        </div>
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+          <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+            <div className="lg:pr-4">
+              <div className="lg:max-w-lg">
+                <p className="text-base font-semibold leading-7 text-indigo-600">
+                  Ponsel Cerdas
+                </p>
+                <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  Mobile Meven
+                </h1>
+                <p className="mt-6 text-xl leading-8 text-gray-700">
+                  Kami di Mobile Meven adalah tim yang terdiri dari
+                  individu-individu yang bersemangat dalam memberikan solusi
+                  yang handal dan terpercaya dalam dunia teknologi, khususnya
+                  dalam hal ponsel pintar. Sebagai penggemar teknologi, kami
+                  menyadari betapa pentingnya perangkat pintar dalam kehidupan
+                  sehari-hari kita, dan kami percaya bahwa setiap orang berhak
+                  mendapatkan perangkat terbaik yang sesuai dengan kebutuhan dan
+                  gaya hidup mereka.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+            <img
+              className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
+              src={aboutUsImage}
+              alt=""
+            />
+          </div>
+          <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+            <div className="lg:pr-4">
+              <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
+                <p>
+                  Visi kami adalah untuk menjadi sumber informasi yang paling
+                  andal dan terkini dalam hal ponsel pintar. Kami berkomitmen
+                  untuk memberikan panduan yang komprehensif dan layanan yang
+                  memuaskan bagi para konsumen yang sedang mencari informasi
+                  tentang ponsel pintar terbaik di pasaran.
+                </p>
+                <p className="mt-8">
+                  Dengan menggunakan teknologi kecerdasan buatan (AI) terkini,
+                  kami menyediakan layanan yang memungkinkan Anda untuk
+                  menelusuri berbagai pilihan ponsel pintar, membandingkan
+                  fitur-fitur, dan mendapatkan rekomendasi yang disesuaikan
+                  dengan kebutuhan dan preferensi Anda. Kami memahami bahwa
+                  setiap individu memiliki kebutuhan yang berbeda-beda, dan
+                  itulah sebabnya kami berusaha untuk memberikan pengalaman yang
+                  personal dan relevan bagi setiap pengguna kami.
+                </p>
+                <p className="mt-8">
+                  Kami memahami bahwa memilih ponsel pintar yang tepat bisa
+                  menjadi proses yang rumit dan membingungkan. Oleh karena itu,
+                  kami berusaha untuk menyederhanakan proses tersebut dengan
+                  menyediakan informasi yang jelas, ulasan yang akurat, dan
+                  rekomendasi yang berdasarkan data dan analisis yang mendalam.
+                  Kami selalu berupaya untuk menjadi sumber yang terpercaya dan
+                  netral, serta memberikan panduan yang tidak memihak kepada
+                  merek tertentu.
+                </p>
+                <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">
+                  Temukan Informasi Ponsel Pintar Terbaik Bersama Kami.
+                </h2>
+                <p className="mt-6">
+                  Terima kasih telah memilih Web Meven sebagai sumber informasi
+                  Anda dalam mencari ponsel pintar terbaik. Kami berharap dapat
+                  terus mendukung Anda dalam setiap langkah perjalanan teknologi
+                  Anda.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AboutUs;
