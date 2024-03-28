@@ -12,29 +12,16 @@ import Table from './component/Table';
 function App() {
   return (
     <Router>
-      <AppContent />
       <Routes>
-        <Route path="/login" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/form" element={<FormInputData />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Table />} />
       </Routes>
       <Footer/>
     </Router>
-  );
-}
-
-function AppContent() {
-  const location = useLocation();
-  const currentURL = location.pathname;
-  const checking = !['/login', '/', '/signup', '/aboutus'].includes(currentURL);
-
-  return (
-    <>
-      {checking && <Navbar />}
-    </>
   );
 }
 
