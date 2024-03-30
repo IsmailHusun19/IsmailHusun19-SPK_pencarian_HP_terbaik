@@ -1,23 +1,42 @@
 import { NumericFormat } from "react-number-format";
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
 import Swal from "sweetalert2";
 import InputMask from "react-input-mask";
+import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
-const FormInputData = () => {
+const FormEditData = () => {
+  const navigate = useNavigate();
+  const urutanAkun = localStorage.getItem('urutanAkun');
+  let akun = JSON.parse(localStorage.getItem('akun' + urutanAkun));
+  const { id } = useParams();
+  const dataHp = akun.dataHp;
   const [formData, setFormData] = useState({
-    id: "",
-    merek: "",
-    harga: "",
-    cpu: "",
-    kamera: "",
-    baterai: "",
-    charging: "",
-    ram: "",
-    rom: "",
-    display: "",
-    refreshRate: "",
+    merek: '',
+    harga: '',
+    cpu: '',
+    kamera: '',
+    baterai: '',
+    charging: '',
+    ram: '',
+    rom: '',
+    display: '',
+    refreshRate: '',
   });
+
+  useEffect(() => {
+    for (const key in dataHp) {
+      if (Object.hasOwnProperty.call(dataHp, key)) {
+        const element = dataHp[key];
+        if (element.id === id) {
+          setFormData({
+            ...element
+          });
+          break;
+        }
+      }
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,43 +46,48 @@ const FormInputData = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const urutanAkun = localStorage.getItem("urutanAkun");
-    const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
-    const id = uuidv4();
-    const nomorUrutanBaru = Object.keys(akun.dataHp).length;
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const newData = { ...formData};
+  for (const key in dataHp) {
+    if (Object.hasOwnProperty.call(dataHp, key)) {
+      const element = dataHp[key];
+      if (element.id === id) {
+        akun.dataHp = {
+          ...akun.dataHp,
+          [key]: newData,
+        };
+      }
+    }
+  }
 
-    const newData = { ...formData, id: id };
+  localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
 
-    akun.dataHp = {
-      ...akun.dataHp,
-      [nomorUrutanBaru]: newData,
-    };
+  setFormData({
+    merek: '',
+    harga: '',
+    cpu: '',
+    kamera: '',
+    baterai: '',
+    charging: '',
+    ram: '',
+    rom: '',
+    display: '',
+    refreshRate: '',
+  });
 
-    localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
-    setFormData({
-      id: "",
-      merek: "",
-      harga: "",
-      cpu: "",
-      kamera: "",
-      baterai: "",
-      charging: "",
-      ram: "",
-      rom: "",
-      display: "",
-      refreshRate: "",
-    });
-
-    return Swal.fire({
-      icon: "success",
-      showConfirmButton: false,
-      text: "Berhasil ditambahkan!",
-      timer: 1500,
-      timerProgressBar: true,
-    });
-  };
+  Swal.fire({
+    icon: "success",
+    showConfirmButton: false,
+    text: "Berhasil edit data",
+    timer: 1500,
+    timerProgressBar: true,
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.timer) {
+      navigate("/dashboard");
+    }
+  });
+};
 
   return (
     <div className="bg-slate-900 h-max flex justify-center items-center px-0 py-[64px] pt-[128px]">
@@ -329,4 +353,4 @@ const FormInputData = () => {
   );
 };
 
-export default FormInputData;
+export default FormEditData;

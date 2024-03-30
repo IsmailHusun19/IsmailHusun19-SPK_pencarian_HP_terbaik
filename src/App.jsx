@@ -9,6 +9,9 @@ import Footer from './component/Footer';
 import SignUp from './pages/SignUp';
 import Table from './component/Table';
 import Team from './pages/Team';
+import FormEditData from './pages/FormEditData';
+import PageNotFound from './pages/PageNotFound';
+import EditSelection from './pages/EditSelection';
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Table />} />
         <Route path="/team" element={<Team />} />
+        <Route path="/editdata/:id" element={<FormEditData />} />
+        <Route path="/selection" element={<EditSelection />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer/>
     </Router>

@@ -2,15 +2,18 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import profile from '../assets/profile.jpg'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+console.log(location.pathname)
 
 const navigation = [
-  { name: 'Dashboard', to: '/dashboard', current: true },
-  { name: 'Team', to: '/team', current: false },
-  { name: 'About Us', to: '/aboutus', current: false },
+  { name: 'Dashboard', to: '/dashboard', current: location.pathname === '/dashboard' ? true : false},
+  { name: 'Selection', to: '/selection', current: location.pathname === '/selection' ? true : false },
+  { name: 'Team', to: '/team', current: location.pathname === '/team' ? true : false },
+  { name: 'About Us', to: '/aboutus', current: location.pathname === '/aboutus' ? true : false },
 ]
 
 function classNames(...classes) {

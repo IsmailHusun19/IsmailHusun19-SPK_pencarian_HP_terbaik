@@ -12,11 +12,17 @@ import {
 } from "@material-tailwind/react";
 
 const TABLE_HEAD = [
+  "No",
   "Merk",
   "Harga",
+  "CPU",
+  "Kamera",
+  "Baterai",
+  "Charging",
   "RAM",
   "ROM",
   "Display",
+  "Refresh rate",
   "Aksi",
 ];
 
@@ -35,11 +41,16 @@ const Table = () => {
 
   useEffect(() => {
     const newData = data.map((item) => ({
-      merk: item.merek,
+      merek: item.merek,
       harga: item.harga,
+      cpu: item.cpu,
+      kamera: item.kamera,
+      baterai: item.baterai,
+      charging: item.charging,
       ram: item.ram,
       rom: item.rom,
       display: item.display,
+      refreshRate: item.refreshRate,
     }));
     if (JSON.stringify(TABLE_ROWS) !== JSON.stringify(newData)) {
       setTABLE_ROWS(newData);
@@ -94,11 +105,22 @@ const Table = () => {
     delete newDataForStorage[keyToDelete];
     akun.dataHp = newDataForStorage;
     localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
-    setReloadEffect(prevState => !prevState);
+    setReloadEffect((prevState) => !prevState);
+  };
+
+  const handleEdit = (index) => {
+    const newData = [...TABLE_ROWS];
+    newData.splice(actualIndex + index, 1);
+    const getAkun = akun.dataHp[actualIndex + index].id;
+    return navigate("/editdata/"+getAkun);
   };
 
   return (
-    <div className={`flex justify-center py-10 bg-slate-900 h-screen px-6 pt-[100px] ${displayedData.length > 4 ? 'items-center' : ''}`}>
+    <div
+      className={`flex justify-center py-10 bg-slate-900 h-screen px-6 pt-[100px] ${
+        displayedData.length > 4 ? "items-center" : ""
+      }`}
+    >
       <Card className="w-full bg-slate-900 text-slate-200 shadow-none">
         <CardHeader
           floated={false}
@@ -142,7 +164,7 @@ const Table = () => {
                       className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                     >
                       {head}{" "}
-                      {index !== TABLE_HEAD.length - 1 && (
+                      {index !== TABLE_HEAD.length && (
                         <ChevronUpDownIcon
                           strokeWidth={2}
                           className="h-4 w-4"
@@ -156,96 +178,186 @@ const Table = () => {
             <tbody>
               {displayedData.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={TABLE_HEAD.length}
-                    className="p-4 text-center"
-                  >
+                  <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
                     Data Kosong
                   </td>
                 </tr>
               ) : (
-                displayedData.map(({ merk, harga, ram, rom, display }, index) => {
-                  const isLast = index === displayedData.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
-                  return (
-                    <tr key={index}>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
+                displayedData.map(
+                  (
+                    {
+                      merek,
+                      harga,
+                      cpu,
+                      kamera,
+                      baterai,
+                      charging,
+                      ram,
+                      rom,
+                      display,
+                      refreshRate,
+                    },
+                    index
+                  ) => {
+                    const isLast = index === displayedData.length - 1;
+                    const classes = isLast
+                      ? "p-4"
+                      : "p-4 border-b border-blue-gray-50";
+                    return (
+                      <tr key={index}>
+                        <td className={classes}>
+                          <div className="flex flex-col w-max">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {index + 1}
+                            </Typography>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {merek}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={classes}>
                           <div className="flex flex-col">
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {merk}
+                              {harga}
                             </Typography>
                           </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {harga}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {ram}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {rom}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {display}
-                          </Typography>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <Tooltip content="Edit">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-5 h-5 cursor-pointer"
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {cpu}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {kamera}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {baterai}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {charging}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex flex-col">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                              />
-                            </svg>
-                          </Tooltip>
+                              {ram}
+                            </Typography>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex flex-col">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {rom}
+                            </Typography>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex flex-col">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {display}
+                            </Typography>
+                          </div>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {refreshRate}
+                              </Typography>
+                            </div>
+                          </div>
+                        </td>
+                        <td className={`flex gap-3 ${classes}`}>
+                            <div className="flex items-center gap-3">
+                              <Tooltip content="Edit">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-6 h-6 cursor-pointer"
+                                  onClick={() => handleEdit(index)}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                                  />
+                                </svg>
+                              </Tooltip>
+                            </div>
                           <Tooltip content="Hapus">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +365,7 @@ const Table = () => {
                               viewBox="0 0 24 24"
                               strokeWidth={1.5}
                               stroke="currentColor"
-                              className="w-5 h-5 cursor-pointer"
+                              className="w-6 h-6 cursor-pointer"
                               onClick={() => handleDelete(index)}
                             >
                               <path
@@ -263,26 +375,37 @@ const Table = () => {
                               />
                             </svg>
                           </Tooltip>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
+                        </td>
+                      </tr>
+                    );
+                  }
+                )
               )}
             </tbody>
           </table>
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Page {Math.ceil((startIndex + 1) / 5)} of {Math.ceil(TABLE_ROWS.length / 5)}
+            Page {Math.ceil((startIndex + 1) / 5)} of{" "}
+            {Math.ceil(TABLE_ROWS.length / 5)}
           </Typography>
           <div className="flex gap-2">
             {/* Tombol "Previous" */}
-            <Button variant="outlined" size="sm" className="text-slate-200" onClick={handlePreviousClick}>
+            <Button
+              variant="outlined"
+              size="sm"
+              className="text-slate-200"
+              onClick={handlePreviousClick}
+            >
               Previous
             </Button>
             {/* Tombol "Next" */}
-            <Button variant="outlined" size="sm" className="text-slate-200" onClick={handleNextClick}>
+            <Button
+              variant="outlined"
+              size="sm"
+              className="text-slate-200"
+              onClick={handleNextClick}
+            >
               Next
             </Button>
           </div>
@@ -296,6 +419,6 @@ const Table = () => {
       </Card>
     </div>
   );
-}
+};
 
 export default Table;

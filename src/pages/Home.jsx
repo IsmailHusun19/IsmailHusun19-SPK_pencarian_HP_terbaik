@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import NavbarV2 from "../component/NavbarV2";
 
 const Home = () => {
-  const cekLogin = () => {
-    return localStorage.getItem("urutanAkun") !== null ? true : false;
-  }
   return (
     <div className="bg-white h-screen">
       <NavbarV2 /> 

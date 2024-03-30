@@ -1,6 +1,7 @@
 import Navbar from "../component/Navbar";
 import NavbarV2 from "../component/NavbarV2";
 import imageIsmail from "../assets/ismail.jpg"
+import profileKosong from "../assets/profile.jpg"
 import { Card, CardBody, Avatar, Typography } from "@material-tailwind/react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,8 +19,7 @@ function TeamCard({ img, name, title, gitHub, instagram, linkedLn }) {
           src={img}
           alt={name}
           variant="circular"
-          size="xl"
-          className="mx-auto mb-6 object-top"
+          className="mx-auto mb-6 object-top w-80 h-60"
         />
         <Typography
           variant="h5"
@@ -52,7 +52,7 @@ function TeamCard({ img, name, title, gitHub, instagram, linkedLn }) {
 
 const members = [
   {
-    img: `${imageIsmail}`,
+    img: `${profileKosong}`,
     name: "Ismail Husun",
     title: "Universitas Banten Jaya",
     gitHub: "https://github.com/IsmailHusun19",
@@ -60,33 +60,33 @@ const members = [
     instagram: "https://www.instagram.com/ismail_husun19?igsh=MTRlMGYwaWluY29pdg==",
   },
   {
-    img: `https://www.material-tailwind.com/img/avatar2.jpg`,
-    name: "Ryan Samuel",
-    title: "Co-Founder",
+    img: `${profileKosong}`,
+    name: "Basil Mulki Faiz Amanullah",
+    title: "Universitas Banten Jaya",
     gitHub: "",
     linkedLn: "",
     instagram: "",
   },
   {
-    img: `https://www.material-tailwind.com/img/avatar5.jpg`,
-    name: "Nora Hazel",
-    title: "UI/UX Designer",
+    img: `${profileKosong}`,
+    name: "Ade Munajat",
+    title: "Universitas Banten Jaya",
     gitHub: "",
     linkedLn: "",
     instagram: "",
   },
   {
-    img: `https://www.material-tailwind.com/img/avatar4.jpg`,
-    name: "Otto Gonzalez",
-    title: "Marketing Specialist",
+    img: `${profileKosong}`,
+    name: "Devani Resta Paraditya",
+    title: "Universitas Banten Jaya",
     gitHub: "",
     linkedLn: "",
     instagram: "",
   },
   {
-    img: `https://www.material-tailwind.com/img/avatar6.jpg`,
-    name: "Emma Roberts",
-    title: "UI Designer",
+    img: `${profileKosong}`,
+    name: "Zulfikar Imam Sholihin",
+    title: "Universitas Banten Jaya",
     gitHub: "",
     linkedLn: "",
     instagram: "",
@@ -143,7 +143,7 @@ export function Team() {
             </Typography>
             <Typography
               variant="lead"
-              className="mx-auto w-full !text-gray-500 text-[18px] italic"
+              className="mx-auto w-full pt-6 !text-gray-700 text-[18px] italic"
             >
               "Tetaplah gigih dalam perjuanganmu menuju keberhasilan. Setiap
               langkah yang kamu ambil membawamu lebih dekat pada impianmu.
