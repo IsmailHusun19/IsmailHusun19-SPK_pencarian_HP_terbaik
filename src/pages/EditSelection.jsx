@@ -1,164 +1,298 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { Radio } from "@material-tailwind/react";
+import TableSelection from "./TableSelection";
 
 const people = [
-  {
-    id: 1,
-    name: "Sangat penting",
-  },
-  {
-    id: 2,
-    name: "Penting",
-  },
-  {
-    id: 3,
-    name: "Tidak terlalu penting",
-  },
+  "1. Keduanya sama penting",
+  "2. Agak lebih penting",
+  "3. Lebih mendekati sedang",
+  "4. Lebih penting dari sedang",
+  "5. Sedang",
+  "6. Lebih mendekati penting",
+  "7. Jauh lebih penting",
+  "8. Jauh lebih dari penting",
+  "9. Mutlak lebih penting",
 ];
 
-const pilihan = [
-  {
-    id: 1,
-    name: "Harga",
-  },
-  {
-    id: 2,
-    name: "CPU",
-  },
-  {
-    id: 3,
-    name: "Kamera",
-  },
-  {
-    id: 4,
-    name: "Baterai",
-  },
-  {
-    id: 5,
-    name: "Charging",
-  },
-  {
-    id: 6,
-    name: "RAM",
-  },
-  {
-    id: 7,
-    name: "ROM",
-  },
-  {
-    id: 8,
-    name: "Display",
-  },
-  {
-    id: 9,
-    name: "Refresh Rate",
-  },
-];
+const pilihan = ["Harga", "CPU", "Kamera", "Baterai", "Desain"];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function EditSelection() {
-  const [selected, setSelected] = useState({});
-  if (Object.keys(selected).length !== pilihan.length) {
-    const initialSelected = {};
-    pilihan.forEach((item) => {
-      initialSelected[item.id] = null;
-    });
-    setSelected(initialSelected);
+const EditSelection = () => {
+  const [selectedRadio, setSelectedRadio] = useState([]);
+  const [selectedListbox, setSelectedListbox] = useState([]);
+
+  const handleRadioChange = (option1, option2, value) => {
+    const updatedSelectedRadio = [...selectedRadio];
+    const index = updatedSelectedRadio.findIndex(
+      (item) => item.option1 === option1 && item.option2 === option2
+    );
+
+    if (index !== -1) {
+      updatedSelectedRadio[index] = { option1, option2, value };
+    } else {
+      updatedSelectedRadio.push({ option1, option2, value });
+    }
+
+    setSelectedRadio(updatedSelectedRadio);
+  };
+
+  const handleListboxChange = (option1, option2, value) => {
+    const updatedSelectedListbox = [...selectedListbox];
+    const index = updatedSelectedListbox.findIndex(
+      (item) => item.option1 === option1 && item.option2 === option2
+    );
+
+    if (index !== -1) {
+      updatedSelectedListbox[index] = { option1, option2, value };
+    } else {
+      updatedSelectedListbox.push({ option1, option2, value });
+    }
+
+    setSelectedListbox(updatedSelectedListbox);
+  };
+
+  const comparisonOptions = [];
+
+  for (let i = 0; i < pilihan.length - 1; i++) {
+    for (let j = i + 1; j < pilihan.length; j++) {
+      comparisonOptions.push([pilihan[i], pilihan[j]]);
+    }
   }
+
+  const urutanAkun = localStorage.getItem('urutanAkun');
+  let akun = JSON.parse(localStorage.getItem('akun' + urutanAkun));
+
+  useEffect(() => {
+    if(akun.radio !== undefined){
+      setSelectedRadio(akun.radio)
+      setSelectedListbox(akun.select)
+    }
+  },[])
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    akun = {
+      ...akun,
+      'radio': selectedRadio,
+      'select': selectedListbox
+    }
+    console.log(akun)
+    localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
+    console.log("Selected Radio:", selectedRadio);
+    console.log("Selected Listbox:", selectedListbox);
+  };
 
   return (
     <div className="h-max flex flex-col w-full items-center justify-center bg-slate-900 py-[120px] gap-4">
-        <h1 className="font-bold text-slate-200 text-xl text-center">
-          Pilih kriteria ponsel
-        </h1>
-      {pilihan.map((item) => (
-        <div key={item.id} className="w-[80%]">
-          <Listbox value={selected[item.id]} onChange={(value) => {
-            setSelected({ ...selected, [item.id]: value });
-          }}>
-            {({ open }) => (
-              <>
-                <Listbox.Label className="block text-base text-left w-full text-slate-200 font-semibold">
-                  {item.name}
-                </Listbox.Label>
-                <div className="relative w-full">
-                  <Listbox.Button className="block py-2.5 px-0 w-full text-sm text-gray-200 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                    <span className="flex items-center">
-                      <span className="ml-3 block truncate">
-                        {selected[item.id] ? selected[item.id].name : "Pilih..."}
+      <h1 className="font-bold text-slate-200 text-xl text-center">
+        Pilih kriteria ponsel
+      </h1>
+      <form onSubmit={handleSubmit} className="w-[80%] flex flex-col gap-14">
+        {comparisonOptions.map(([option1, option2], index) => (
+          <div key={index}>
+            <div className="flex gap-10 font-normal">
+              <Radio
+                name={`type-${option1}-${option2}`}
+                label={
+                  <span className="font-normal text-slate-200 shadow-none">
+                    {option1}
+                  </span>
+                }
+                checked={
+                  selectedRadio.find(
+                    (item) =>
+                      item.option1 === option1 && item.option2 === option2
+                  )?.value === option1
+                }
+                onChange={() => handleRadioChange(option1, option2, option1)}
+                className="mr-3 text-blue-700 border-none transition-none nonAktif"
+              />
+              <Radio
+                name={`type-${option1}-${option2}`}
+                label={
+                  <span className="font-normal text-slate-200">{option2}</span>
+                }
+                checked={
+                  selectedRadio.find(
+                    (item) =>
+                      item.option1 === option1 && item.option2 === option2
+                  )?.value === option2
+                }
+                onChange={() => handleRadioChange(option1, option2, option2)}
+                className="mr-3 text-blue-700 border-none transition-none nonAktif"
+              />
+            </div>
+            <div className="relative w-full">
+              <Listbox
+                value={
+                  selectedListbox.find(
+                    (item) =>
+                      item.option1 === option1 && item.option2 === option2
+                  ) || null
+                }
+                onChange={(value) => {
+                  handleListboxChange(option1, option2, value);
+                }}
+              >
+                {({ open }) => (
+                  <>
+                    <Listbox.Button className="block py-2.5 px-0 w-full text-sm text-gray-200 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                      <span className="flex items-center">
+                        <span className="ml-3 block truncate">
+                          {selectedListbox.find(
+                            (item) =>
+                              item.option1 === option1 &&
+                              item.option2 === option2
+                          )
+                            ? selectedListbox.find(
+                                (item) =>
+                                  item.option1 === option1 &&
+                                  item.option2 === option2
+                              ).value
+                            : "Pilih..."}
+                        </span>
                       </span>
-                    </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                      <ChevronUpDownIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Listbox.Button>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                        <ChevronUpDownIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
 
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-slate-200 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {people.map((person) => (
-                        <Listbox.Option
-                          key={person.id}
-                          className={({ active }) =>
-                            classNames(
-                              active
-                                ? "bg-indigo-600 text-white"
-                                : "text-gray-900",
-                              "relative cursor-default select-none py-2 pl-3 pr-9"
-                            )
-                          }
-                          value={person}
-                        >
-                          {({ selected, active }) => (
-                            <>
-                              <div className="flex items-center">
-                                <span
-                                  className={classNames(
-                                    selected ? "font-semibold" : "font-normal",
-                                    "ml-3 block truncate"
-                                  )}
-                                >
-                                  {person.name}
-                                </span>
-                              </div>
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-slate-200 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {people.map((person, personIndex) => (
+                          <Listbox.Option
+                            key={personIndex}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-gray-900",
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={person}
+                            onClick={() => setSelectedListbox(person)}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <div className="flex items-center">
+                                  <span
+                                    className={classNames(
+                                      selected
+                                        ? "font-semibold"
+                                        : "font-normal",
+                                      "ml-3 block truncate"
+                                    )}
+                                  >
+                                    {person}
+                                  </span>
+                                </div>
 
-                              {selected ? (
-                                <span
-                                  className={classNames(
-                                    active ? "text-white" : "text-indigo-600",
-                                    "absolute inset-y-0 right-0 flex items-center pr-4"
-                                  )}
-                                >
-                                  <CheckIcon
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </>
-            )}
-          </Listbox>
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-indigo-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </>
+                )}
+              </Listbox>
+            </div>
+          </div>
+        ))}
+        <button
+          type="submit"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-[35px] py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-auto"
+        >
+          Submit
+        </button>
+      </form>
+      <TableSelection />
+      <div className="w-[80%] mt-4 text-slate-200 text-base font-light">
+        <h1 className="my-3 text-lg">
+          Pada website kami, kami menggunakan skala berikut untuk membantu Anda
+          memilih ponsel terbaik menggunakan metode AHP
+        </h1>
+        <h3 className="font-medium my-2 text-lg">
+          Skala Penilaian AHP untuk Memilih Ponsel Terbaik
+        </h3>
+        <div className="ml-2 flex gap-4 flex-col">
+          <p>
+            1. Sama Penting: Keduanya memiliki tingkat penting yang sama bagi
+            Anda.
+          </p>
+          <p>
+            2. Agak Lebih Penting: Ini mengindikasikan bahwa salah satu sedikit
+            lebih penting daripada yang lain dalam pandangan Anda.
+          </p>
+          <p>
+            3. Lebih Mendekati Sedang: Jika Anda menggunakan skala ini, berarti
+            salah satu memiliki pengaruh yang sekitar sedang dibandingkan dengan
+            yang lain.
+          </p>
+          <p>
+            4. Lebih Penting dari Sedang: Pada titik ini, Anda menilai bahwa
+            salah satu lebih penting dari pada yang lain, namun dengan perbedaan
+            yang moderat.
+          </p>
+          <p>
+            5. Sedang: Ini berarti pengaruh keduanya adalah sedang bagi Anda.
+          </p>
+          <p>
+            6. Lebih Mendekati Penting: Di sini, Anda merasa bahwa salah satu
+            sedikit lebih penting daripada yang lain.
+          </p>
+          <p>
+            7. Jauh Lebih Penting: Pada tahap ini, Anda memandang bahwa salah
+            satu jauh lebih penting daripada yang lain.
+          </p>
+          <p>
+            8. Jauh Lebih dari Penting: Ini menunjukkan bahwa salah satu jauh
+            lebih penting daripada yang lain, dengan perbedaan yang sangat
+            besar.
+          </p>
+          <p>
+            9. Mutlak Lebih Penting: Terakhir, Anda memandang bahwa salah satu
+            mutlak lebih penting daripada yang lain
+          </p>
         </div>
-      ))}
+        <p className="my-5 text-lg">
+          Dengan menggunakan skala ini, Anda dapat dengan lebih mudah
+          membandingkan ponsel-pensel yang berbeda dan menentukan tingkat
+          kepentingan relatif di antara mereka saat menggunakan metode AHP untuk
+          memilih ponsel terbaik.
+        </p>
+      </div>
     </div>
   );
-}
+};
+
+export default EditSelection;

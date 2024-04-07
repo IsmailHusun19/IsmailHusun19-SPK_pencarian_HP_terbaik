@@ -5,3 +5,12 @@
 body {
     scroll-behavior: smooth;
 }
+
+.nonAktif:focus {
+    --tw-ring-offset-width: 2px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: #1C64F2;
+    --tw-ring-offset-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    box-shadow: none !important;
+}

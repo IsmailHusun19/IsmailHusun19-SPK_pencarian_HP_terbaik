@@ -13,7 +13,8 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
-    dataHp: []
+    dataHp: [],
+    kebutuhanSpesifikasi: [1,2,3]
   });
 
   const [showPassword, setShowPassword] = useState(false);
