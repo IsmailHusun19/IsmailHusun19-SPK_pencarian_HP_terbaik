@@ -119,7 +119,7 @@ const SignUp = () => {
                     autoComplete="text"
                     required
                     onChange={handleChange}
-                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-nomal md:font-semibold lg:font-semibold xl:font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -139,7 +139,7 @@ const SignUp = () => {
                     autoComplete="email"
                     required
                     onChange={handleChange}
-                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-nomal md:font-semibold lg:font-semibold xl:font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -162,7 +162,7 @@ const SignUp = () => {
                     onChange={handleChange}
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
-                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 absolute"
+                    className="block w-full p-2 rounded-md border-0 py-1.5 text-gray-900 font-nomal md:font-semibold lg:font-semibold xl:font-semibold shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 absolute"
                   />
                   <p
                     onClick={togglePasswordVisibility}
