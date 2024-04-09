@@ -12,6 +12,7 @@ import Team from './pages/Team';
 import FormEditData from './pages/FormEditData';
 import PageNotFound from './pages/PageNotFound';
 import EditSelection from './pages/EditSelection';
+import TambahPilihanKretaria from './component/TambahPilihanKretaria';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/team" element={<Team />} />
         <Route path="/editdata/:id" element={<FormEditData />} />
         <Route path="/selection" element={<EditSelection />} />
+        <Route path="/tambahkretaria" element={<TambahPilihanKretaria />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer/>
@@ -37,7 +39,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const currentURL = location.pathname;
-  const checking = !['/login', '/', '/signup', '/aboutus', '/team'].includes(currentURL);
+  const checking = !['/login', '/', '/signup', '/aboutus', '/team', 'tambahkretaria'].includes(currentURL);
 
   return (
     <>

@@ -128,7 +128,7 @@ const Table = () => {
             </Link>
           </div>
         </CardHeader>
-        <CardBody className="overflow-x-auto p-0 top-0 px-0">
+         <CardBody className="overflow-x-auto p-0 top-0 px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr>
