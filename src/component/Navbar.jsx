@@ -224,10 +224,9 @@ const Navbar = () => {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Disclosure.Button
+            {navigation.map((item) => (
+                <Link
                   key={item.name}
-                  as="a"
                   to={item.to}
                   className={classNames(
                     item.current
@@ -238,7 +237,7 @@ const Navbar = () => {
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
-                </Disclosure.Button>
+                </Link>
               ))}
               {ponsel.length > 1 ? (
                 <Menu
@@ -288,7 +287,7 @@ const Navbar = () => {
                   </Transition>
                 </Menu>
               ) : (
-                ""
+                ''
               )}
             </div>
           </Disclosure.Panel>
