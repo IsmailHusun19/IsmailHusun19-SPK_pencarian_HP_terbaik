@@ -2,6 +2,7 @@ import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip } from "flowbite-react";
+import Swal from "sweetalert2";
 import {
   Card,
   CardHeader,
@@ -11,7 +12,7 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 
-const TABLE_HEAD = ["No", "Merk", "Harga", "Aksi"];
+const TABLE_HEAD = ["No", "Merk", "Aksi"];
 
 const Table = () => {
   const navigate = useNavigate();
@@ -19,9 +20,20 @@ const Table = () => {
     return navigate("/login");
   }
   const urutanAkun = localStorage.getItem("urutanAkun");
-  const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
+  let akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
 
   const keys = Object.keys(akun?.dataHp || {});
+  const numericKeys = Array.from({ length: keys.length }, (_, index) =>
+    index.toString()
+  );
+  numericKeys.sort((a, b) => parseInt(a) - parseInt(b));
+  const sortedData = {};
+  numericKeys.forEach((key, index) => {
+    sortedData[key] = akun.dataHp[keys[index]];
+  });
+
+  akun.dataHp = sortedData;
+  localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
 
   const data = keys.map((key) => akun.dataHp[key]);
   const [TABLE_ROWS, setTABLE_ROWS] = useState([]);
@@ -29,7 +41,6 @@ const Table = () => {
   useEffect(() => {
     const newData = data.map((item) => ({
       merek: item.merek,
-      harga: item.harga,
     }));
     if (JSON.stringify(TABLE_ROWS) !== JSON.stringify(newData)) {
       setTABLE_ROWS(newData);
@@ -74,17 +85,53 @@ const Table = () => {
   };
 
   const handleDelete = (index) => {
-    const newData = [...TABLE_ROWS];
-    newData.splice(actualIndex + index, 1);
-    setTABLE_ROWS(newData);
-    const newActualIndex = actualIndex - 1 < 0 ? 0 : actualIndex - 1;
-    setActualIndex(newActualIndex);
-    const newDataForStorage = { ...akun.dataHp };
-    const keyToDelete = keys[actualIndex + index];
-    delete newDataForStorage[keyToDelete];
-    akun.dataHp = newDataForStorage;
-    localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
-    setReloadEffect((prevState) => !prevState);
+    let cheking = false;
+    const sintax = () => {
+      const newData = [...TABLE_ROWS];
+      newData.splice(actualIndex + index, 1);
+      setTABLE_ROWS(newData);
+      const newActualIndex = actualIndex - 1 < 0 ? 0 : actualIndex - 1;
+      setActualIndex(newActualIndex);
+      const newDataForStorage = { ...akun.dataHp };
+      const keyToDelete = keys[actualIndex + index];
+      delete newDataForStorage[keyToDelete];
+      akun.dataHp = newDataForStorage;
+      const kebutuhanSpesifikasiPonsel = akun.kebutuhanSpesifikasi;
+      akun = { ...akun };
+      kebutuhanSpesifikasiPonsel.forEach((element) => {
+        akun[`radio${element}`] = [];
+        akun[`select${element}`] = [];
+      });
+      localStorage.setItem("akun" + urutanAkun, JSON.stringify(akun));
+      setReloadEffect((prevState) => !prevState);
+      navigate("/dashboard");
+    };
+
+    akun.kebutuhanSpesifikasi.forEach((element) => {
+      if(akun[`radio${element}`] !== undefined){
+        if(akun[`radio${element}`].length !== 0){
+          cheking = true
+        }
+      }
+    });
+
+    if(cheking){
+      Swal.fire({
+        title: "Yakin?",
+        text: `Jika ingin menghapus data, selection dan option akan di riset`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sintax();
+        }
+      });
+    }else{
+      sintax();
+    }
   };
 
   const handleEdit = (index) => {
@@ -128,7 +175,7 @@ const Table = () => {
             </Link>
           </div>
         </CardHeader>
-         <CardBody className="overflow-x-auto p-0 top-0 px-0">
+        <CardBody className="overflow-x-auto p-0 top-0 px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr>
@@ -162,7 +209,7 @@ const Table = () => {
                   </td>
                 </tr>
               ) : (
-                displayedData.map(({ merek, harga }, index) => {
+                displayedData.map(({ merek }, index) => {
                   const isLast = index === displayedData.length - 1;
                   const classes = isLast
                     ? "p-4"
@@ -191,17 +238,6 @@ const Table = () => {
                               {merek}
                             </Typography>
                           </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {harga}
-                          </Typography>
                         </div>
                       </td>
                       <td className={`w-4 ${classes}`}>

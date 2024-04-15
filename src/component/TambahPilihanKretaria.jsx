@@ -52,6 +52,8 @@ const TambahPilihanKretaria = () => {
               ...akunData,
               radio: [],
               select: [],
+              [`radio${dataTambah}`]: [],
+              [`select${dataTambah}`]: [],
               kebutuhanSpesifikasi:
                 data.kebutuhanSpesifikasi.concat(dataTambah),
             };
@@ -73,11 +75,14 @@ const TambahPilihanKretaria = () => {
           ...akunData,
           radio: [],
           select: [],
+          [`radio${dataTambah}`]: [],
+          [`select${dataTambah}`]: [],
           kebutuhanSpesifikasi: data.kebutuhanSpesifikasi.concat(dataTambah),
         };
         localStorage.setItem("akun" + urutanAkun, JSON.stringify(updatedAkun));
       }
       setDataTambah("");
+      navigate("/tambahkretaria");
     }
   };
 
@@ -95,13 +100,16 @@ const TambahPilihanKretaria = () => {
         }).then((result) => {
           if (result.isConfirmed) {
             const newData = [...data.kebutuhanSpesifikasi];
-            console.log(newData);
+            let updatedAkun = {...akunData}
+            delete updatedAkun[`radio${newData[index]}`];
+            delete updatedAkun[`select${newData[index]}`];
+            console.log(updatedAkun)
             newData.splice(index, 1);
             setData({
               kebutuhanSpesifikasi: newData,
             });
-            const updatedAkun = {
-              ...akunData,
+            updatedAkun = {
+              ...updatedAkun,
               radio: [],
               select: [],
               kebutuhanSpesifikasi: newData,
@@ -114,19 +122,23 @@ const TambahPilihanKretaria = () => {
         });
       } else {
         const newData = [...data.kebutuhanSpesifikasi];
-        console.log(newData);
+        let updatedAkun = {...akunData}
+        delete updatedAkun[`radio${newData[index]}`];
+        delete updatedAkun[`select${newData[index]}`];
+        console.log(updatedAkun)
         newData.splice(index, 1);
         setData({
           kebutuhanSpesifikasi: newData,
         });
-        const updatedAkun = {
-          ...akunData,
+        updatedAkun = {
+          ...updatedAkun,
           radio: [],
           select: [],
           kebutuhanSpesifikasi: newData,
         };
         localStorage.setItem("akun" + urutanAkun, JSON.stringify(updatedAkun));
       }
+      navigate("/tambahkretaria");
     } else {
       return Swal.fire({
         icon: "error",

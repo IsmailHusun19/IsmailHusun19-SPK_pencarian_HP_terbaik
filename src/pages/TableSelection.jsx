@@ -2,8 +2,10 @@ import { Card, Typography, CardBody } from "@material-tailwind/react";
 import PersentaseSelection from "../component/PersentaseSelection";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const TableSelection = () => {
+  const dataKretariaPonsel = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.getItem("urutanAkun") === null) {
@@ -15,8 +17,8 @@ const TableSelection = () => {
   const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
 
   if (urutanAkun !== null) {
-    const radio = akun.radio;
-    const select = akun.select;
+    const radio = akun[Object.keys(dataKretariaPonsel).length !== 0 ? `radio${dataKretariaPonsel.kretaria}` : 'radio'];
+    const select = akun[Object.keys(dataKretariaPonsel).length !== 0 ? `select${dataKretariaPonsel.kretaria}` : 'select'];
     if (radio !== undefined) {
       const data = radio.map((item, i) => {
         const skala = parseInt(select[i].value.match(/\d+/)[0]);
@@ -50,6 +52,8 @@ const TableSelection = () => {
         const totalPerBaris = baris.reduce((total, nilai) => total + nilai, 0);
         return totalPerBaris / baris.length;
       });
+
+      console.log(hasilAkhir)
 
       const totalPersentase = hasilAkhir.reduce((acc, curr) => acc + curr, 0);
       const percentages = hasilAkhir.map((value) =>

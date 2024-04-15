@@ -13,6 +13,7 @@ import FormEditData from './pages/FormEditData';
 import PageNotFound from './pages/PageNotFound';
 import EditSelection from './pages/EditSelection';
 import TambahPilihanKretaria from './component/TambahPilihanKretaria';
+import Ponsel from './pages/Ponsel';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/editdata/:id" element={<FormEditData />} />
         <Route path="/selection" element={<EditSelection />} />
         <Route path="/tambahkretaria" element={<TambahPilihanKretaria />} />
+        <Route path="/ponsel/:kretaria/:index" element={<Ponsel />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer/>

@@ -1,41 +1,87 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import profile from '../assets/profile.jpg'
+import { Fragment, useEffect, useState } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import profile from "../assets/profile.jpg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-console.log(location.pathname)
+  const urutanAkun = localStorage.getItem("urutanAkun");
+  const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
 
-const navigation = [
-  { name: 'Dashboard', to: '/dashboard', current: location.pathname === '/dashboard' ? true : false},
-  { name: 'Selection', to: '/selection', current: location.pathname === '/selection' ? true : false },
-  { name: 'Team', to: '/team', current: location.pathname === '/team' ? true : false },
-  { name: 'About Us', to: '/aboutus', current: location.pathname === '/aboutus' ? true : false },
-]
+  const keysKretaria = Object.keys(akun?.kebutuhanSpesifikasi || {});
+  const keysPonsel = Object.keys(akun?.dataHp || {});
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+  const dataKretaria = keysKretaria.map((key) => akun.kebutuhanSpesifikasi[key]);
+  const dataPonsel = keysPonsel.map((key) => akun.dataHp[key]);
+  const [kretaria, setKretaria] = useState([]);
+  const [ponsel, setPonsel] = useState([]);
 
-const nameAkun = () => {
-  if(localStorage.getItem("urutanAkun") !== null){
-    const urutanAkun = localStorage.getItem("urutanAkun");
-    const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
-    return akun.name
-  }else{
-    return navigate("/login");
+  useEffect(() => {
+    const newDataKretaria = dataKretaria.map((item, index) => ({
+      name: item
+    }));
+    const newDataPonsel = dataPonsel.map((item, index) => ({
+      id: item.id,
+      name: item.merek
+    }));
+    if (JSON.stringify(kretaria) !== JSON.stringify(newDataKretaria)) {
+      setKretaria(newDataKretaria);
+    }
+    if (JSON.stringify(ponsel) !== JSON.stringify(newDataPonsel)) {
+      setPonsel(newDataPonsel);
+    }
+  }, [dataKretaria, kretaria, dataPonsel, ponsel]);
+
+
+  const navigation = [
+    {
+      name: "Dashboard",
+      to: "/dashboard",
+      current: location.pathname === "/dashboard" ? true : false,
+    },
+    {
+      name: "Selection",
+      to: "/selection",
+      current: location.pathname === "/selection" ? true : false,
+    },
+    {
+      name: "Team",
+      to: "/team",
+      current: location.pathname === "/team" ? true : false,
+    },
+    {
+      name: "About Us",
+      to: "/aboutus",
+      current: location.pathname === "/aboutus" ? true : false,
+    },
+  ];
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
   }
-}
-const logout = () => {
-  if(localStorage.getItem("urutanAkun") !== null){
-    return localStorage.removeItem("urutanAkun");
-  }
-}
+
+  const nameAkun = () => {
+    if (localStorage.getItem("urutanAkun") !== null) {
+      const urutanAkun = localStorage.getItem("urutanAkun");
+      const akun = JSON.parse(localStorage.getItem("akun" + urutanAkun));
+      return akun.name;
+    } else {
+      return navigate("/login");
+    }
+  };
+  const logout = () => {
+    if (localStorage.getItem("urutanAkun") !== null) {
+      return localStorage.removeItem("urutanAkun");
+    }
+  };
   return (
-    <Disclosure as="nav" className="bg-gray-950 fixed top-0 left-0 w-full z-50 shadow-lg">
+    <Disclosure
+      as="nav"
+      className="bg-gray-950 fixed top-0 left-0 w-full z-50 shadow-lg"
+    >
       {({ open }) => (
         <>
           <div className="w-full px-6">
@@ -67,14 +113,66 @@ const logout = () => {
                         key={item.name}
                         to={item.to}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "rounded-md px-3 py-2 text-sm font-medium"
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
                       </Link>
                     ))}
+                    {ponsel.length > 1 ? (
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <div>
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 items-center rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-sm font-medium">
+                            Options
+                            <ChevronDownIcon
+                              className="-mr-1 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </Menu.Button>
+                        </div>
+
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute left-0 z-10 mt-[14px] w-56 origin-top-right text-gray-400 bg-slate-950 rounded-md rounded-tr-none rounded-tl-none">
+                            <div className="py-1 flex flex-col gap-1">
+                              {kretaria.map((item, index) => (
+                                <Menu.Item key={index}>
+                                  {({ active }) => (
+                                    <Link
+                                      to={`/ponsel/${item.name}/${index}`}
+                                      className={classNames(
+                                        active
+                                          ? "bg-gray-900 text-white transition duration-250 ease-in-out"
+                                          : "hover:bg-gray-900",
+                                        "block px-4 py-2 text-sm font-medium"
+                                      )}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  )}
+                                </Menu.Item>
+                              ))}
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
@@ -108,7 +206,10 @@ const logout = () => {
                           <Link
                             to="/"
                             onClick={logout}
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
                           >
                             Sign out
                           </Link>
@@ -127,22 +228,74 @@ const logout = () => {
                 <Disclosure.Button
                   key={item.name}
                   as="a"
-                  href={item.to}
+                  to={item.to}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md px-3 py-2 text-base font-medium"
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
               ))}
+              {ponsel.length > 1 ? (
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left w-full"
+                >
+                  <div>
+                    <Menu.Button className="inline-flex w-full justify-start gap-x-1.5 items-start rounded-md p-2 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-sm font-medium">
+                      Options
+                      <ChevronDownIcon
+                        className="-mr-1 h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </Menu.Button>
+                  </div>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="w-full text-gray-400 bg-slate-950 rounded-md rounded-tr-none rounded-tl-none transition duration-250 ease-in-out">
+                      <div className="py-1 flex flex-col gap-1">
+                        {kretaria.map((item, index) => (
+                          <Menu.Item key={index}>
+                            {({ active }) => (
+                              <Link
+                              to={`/ponsel/${item.name}/${index}`}
+                                className={classNames(
+                                  active
+                                    ? "bg-gray-900 text-white transition duration-250 ease-in-out"
+                                    : "hover:bg-gray-900",
+                                  "block px-4 py-2 text-sm font-medium"
+                                )}
+                              >
+                                {item.name}
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              ) : (
+                ""
+              )}
             </div>
           </Disclosure.Panel>
         </>
       )}
     </Disclosure>
-  )
-}
+  );
+};
 
 export default Navbar;

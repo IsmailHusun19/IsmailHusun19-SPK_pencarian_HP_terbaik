@@ -16,7 +16,8 @@ const SignUp = () => {
     dataHp: [],
     kebutuhanSpesifikasi: ["Harga", "CPU", "Kamera", "Baterai", "Desain"],
     radio: [],
-    select: []
+    select: [],
+    ponsel: []
   });
 
   const [showPassword, setShowPassword] = useState(false);
