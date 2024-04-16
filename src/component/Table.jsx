@@ -37,11 +37,17 @@ const Table = () => {
 
   const data = keys.map((key) => akun.dataHp[key]);
   const [TABLE_ROWS, setTABLE_ROWS] = useState([]);
+  console.log(data)
 
   useEffect(() => {
-    const newData = data.map((item) => ({
-      merekHP: item.merek,
-    }));
+    const newData = data.map((item) => {
+      if (item && item.merek !== undefined) {
+        return { merekHP: item.merek };
+      } else {
+        return null;
+      }
+    }).filter(item => item !== null);
+  
     if (JSON.stringify(TABLE_ROWS) !== JSON.stringify(newData)) {
       setTABLE_ROWS(newData);
     }
