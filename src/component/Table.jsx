@@ -40,7 +40,7 @@ const Table = () => {
 
   useEffect(() => {
     const newData = data.map((item) => ({
-      merek: item.merek,
+      merekHP: item.merek,
     }));
     if (JSON.stringify(TABLE_ROWS) !== JSON.stringify(newData)) {
       setTABLE_ROWS(newData);
@@ -209,7 +209,7 @@ const Table = () => {
                   </td>
                 </tr>
               ) : (
-                displayedData.map(({ merek }, index) => {
+                displayedData.map(({ merekHP }, index) => {
                   const isLast = index === displayedData.length - 1;
                   const classes = isLast
                     ? "p-4"
@@ -235,7 +235,7 @@ const Table = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {merek}
+                              {merekHP}
                             </Typography>
                           </div>
                         </div>
