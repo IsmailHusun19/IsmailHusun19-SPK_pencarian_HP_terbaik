@@ -52,8 +52,11 @@ const TableSelection = () => {
         const totalPerBaris = baris.reduce((total, nilai) => total + nilai, 0);
         return totalPerBaris / baris.length;
       });
-
-      console.log(hasilAkhir)
+      const updateDataRataRata = {
+        ...akun,
+        [Object.keys(dataKretariaPonsel).length !== 0 ? `hasilRataRata${dataKretariaPonsel.kretaria}` : 'hasilRataRata']: [hasilAkhir]
+      };
+      localStorage.setItem("akun" + urutanAkun, JSON.stringify(updateDataRataRata));
 
       const totalPersentase = hasilAkhir.reduce((acc, curr) => acc + curr, 0);
       const percentages = hasilAkhir.map((value) =>
@@ -79,6 +82,7 @@ const TableSelection = () => {
       const rataRata = total / hasilBagi3.length;
 
       const CI = (rataRata - matrix.length) / (matrix.length - 1);
+      console.log(CI)
       let IR = 0;
 
       if (matrix.length === 2) {
@@ -150,7 +154,8 @@ const TableSelection = () => {
                       <tr className="border-b border-blue-gray-100 bg-blue-gray-50/50">
                         <td className="p-4 font-bold">CR</td>
                         <td className="p-4 absolute right-0 text-right font-bold">
-                          {CR.toFixed(4)}
+                        {isNaN(CR) ? '0.0000' : CR.toFixed(4)}
+                          {console.log(CR)}
                         </td>
                       </tr>
                     </tbody>

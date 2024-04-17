@@ -41,7 +41,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const currentURL = location.pathname;
-  const checking = !['/login', '/', '/signup', '/aboutus', '/team', 'tambahkretaria'].includes(currentURL);
+  const checking = !['/login', '/', '/signup', '/aboutus', '/team', '/form', '/tambahkretaria', 'dashboard', '/selection', '/editdata/:id', '/ponsel/:kretaria/:index'].includes(currentURL);
 
   return (
     <>
