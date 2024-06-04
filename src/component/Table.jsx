@@ -12,10 +12,12 @@ import {
   CardBody,
   CardFooter,
 } from "@material-tailwind/react";
+import PersentaseSelection from "./PersentaseSelection";
 
 const TABLE_HEAD = ["No", "Merk", "Aksi"];
 
 const Table = () => {
+  const [results, setResults] = useState([]);
   const cekLogin = () => {
     return localStorage.getItem("urutanAkun") !== null ? true : false;
   };
@@ -41,7 +43,6 @@ const Table = () => {
 
   const data = keys.map((key) => akun.dataHp[key]);
   const [TABLE_ROWS, setTABLE_ROWS] = useState([]);
-  console.log(data);
 
   useEffect(() => {
     const newData = data
@@ -168,31 +169,59 @@ const Table = () => {
   });
 
   const btnCekPonsel = (e) => {
-    let rataRata = [];
     e.preventDefault();
     if (cekPonsel === true) {
-      if (akun) {
-        for (let prop in akun) {
-          if (prop.startsWith("hasilRataRata")) {
-            let parts = prop.split("hasilRataRata");
-            if (parts.length > 1 && parts[1].trim() !== "") {
-              rataRata.push(akun[prop]);
-            }
+      const kebutuhanSpesifikasi = akun.kebutuhanSpesifikasi;
+      const allHasilRataRata = kebutuhanSpesifikasi.map((spec) => {
+        const key = akun[`hasilRataRata${spec}`];
+        return key || [];
+      });
+      const rataRata = akun.hasilRataRata.flat();
+
+      function calculateResults(rataRata, allHasilRataRata) {
+        const results = [];
+        for (let i = 0; i < allHasilRataRata[0].length; i++) {
+          let sum = 0;
+          for (let j = 0; j < rataRata.length; j++) {
+            sum += rataRata[j] * allHasilRataRata[j][i];
           }
+          results.push(sum);
         }
+
+        return results;
       }
+      const calculatedResults = calculateResults(
+        rataRata,
+        allHasilRataRata.flat()
+      );
+      const formattedResults = calculatedResults.map((result) =>
+        result.toFixed(3)
+      );
+      setResults(formattedResults);
+      results.forEach((result, index) => {
+        console.log(`Hasil perhitungan ${index + 1}: ${result}`);
+      });
     } else {
       alert("gagal");
     }
   };
 
+  const dataMerekHp = akun.dataHp; // asumsi dataMerekHp adalah objek
+  const brands = Object.values(dataMerekHp); // Mengambil semua nilai dari objek ke dalam array
+  
+  const uniqueBrands = Array.from(
+    new Set(brands.map((brand) => brand.merek.toLowerCase()))
+  ).map((merek) => merek.charAt(0).toUpperCase() + merek.slice(1));
+  
+  console.log(uniqueBrands);
+
   return (
     <>
       {cekLogin() ? <Navbar /> : null}
       <div
-        className={`flex justify-center py-10 bg-slate-900 h-screen px-6 pt-[100px] ${
+        className={`flex justify-center py-10 bg-slate-900 px-6 pt-[100px] ${
           displayedData.length > 4 ? "items-center" : ""
-        }`}
+        } ${results.length > 0 ? "h-full" : "h-screen"}`}
       >
         <Card className="w-full bg-slate-900 text-slate-200 shadow-none">
           <CardHeader
@@ -365,10 +394,14 @@ const Table = () => {
           <button
             type="submit"
             onClick={btnCekPonsel}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-[35px] py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-auto"
+            className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-[35px] py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-auto 
+            ${results.length > 0 ? "mb-4" : "mb-0"}`}
           >
             Cek Ponsel
           </button>
+          {results.length > 0 && (
+            <PersentaseSelection persentase={results} name={uniqueBrands} />
+          )}
         </Card>
       </div>
     </>

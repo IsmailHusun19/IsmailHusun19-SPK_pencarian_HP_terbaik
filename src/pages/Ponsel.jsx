@@ -9,15 +9,15 @@ import { useParams } from "react-router-dom";
 import Navbar from "../component/Navbar";
 
 const skala = [
-  "1. Keduanya sama penting",
-  "2. Agak lebih penting",
+  "1. Keduanya sama unggul",
+  "2. Agak lebih unggul",
   "3. Lebih mendekati sedang",
-  "4. Lebih penting dari sedang",
+  "4. Lebih unggul dari sedang",
   "5. Sedang",
-  "6. Lebih mendekati penting",
-  "7. Jauh lebih penting",
-  "8. Jauh lebih dari penting",
-  "9. Mutlak lebih penting",
+  "6. Lebih mendekati unggul",
+  "7. Jauh lebih unggul",
+  "8. Jauh lebih dari unggul",
+  "9. Mutlak lebih unggul",
 ];
 
 function classNames(...classes) {

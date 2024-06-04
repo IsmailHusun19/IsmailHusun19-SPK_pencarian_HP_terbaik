@@ -82,7 +82,6 @@ const TableSelection = () => {
       const rataRata = total / hasilBagi3.length;
 
       const CI = (rataRata - matrix.length) / (matrix.length - 1);
-      console.log(CI)
       let IR = 0;
 
       if (matrix.length === 2) {
@@ -155,7 +154,6 @@ const TableSelection = () => {
                         <td className="p-4 font-bold">CR</td>
                         <td className="p-4 absolute right-0 text-right font-bold">
                         {isNaN(CR) ? '0.0000' : CR.toFixed(4)}
-                          {console.log(CR)}
                         </td>
                       </tr>
                     </tbody>
