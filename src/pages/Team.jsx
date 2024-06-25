@@ -1,6 +1,9 @@
 import Navbar from "../component/Navbar";
 import NavbarV2 from "../component/NavbarV2";
 import imageIsmail from "../assets/ismail.jpg"
+import imageBasil from "../assets/basil.jpeg"
+import imageSyarifudin from "../assets/syarifudin.jpeg"
+import imageDevani from "../assets/dafani.jpeg"
 import profileKosong from "../assets/profile.jpg"
 import { Card, CardBody, Avatar, Typography } from "@material-tailwind/react";
 
@@ -52,7 +55,7 @@ function TeamCard({ img, name, title, gitHub, instagram, linkedLn }) {
 
 const members = [
   {
-    img: `${profileKosong}`,
+    img: `${imageIsmail}`,
     name: "Ismail Husun",
     title: "Universitas Banten Jaya",
     gitHub: "https://github.com/IsmailHusun19",
@@ -60,7 +63,7 @@ const members = [
     instagram: "https://www.instagram.com/ismail_husun19?igsh=MTRlMGYwaWluY29pdg==",
   },
   {
-    img: `${profileKosong}`,
+    img: `${imageBasil}`,
     name: "Basil Mulki Faiz Amanullah",
     title: "Universitas Banten Jaya",
     gitHub: "",
@@ -76,7 +79,7 @@ const members = [
     instagram: "",
   },
   {
-    img: `${profileKosong}`,
+    img: `${imageDevani}`,
     name: "Devani Resta Paraditya",
     title: "Universitas Banten Jaya",
     gitHub: "",
@@ -86,6 +89,14 @@ const members = [
   {
     img: `${profileKosong}`,
     name: "Zulfikar Imam Sholihin",
+    title: "Universitas Banten Jaya",
+    gitHub: "",
+    linkedLn: "",
+    instagram: "",
+  },
+  {
+    img: `${imageSyarifudin}`,
+    name: "syarifudin",
     title: "Universitas Banten Jaya",
     gitHub: "",
     linkedLn: "",
